@@ -14,7 +14,6 @@ process.on( 'unhandledRejection', ( err ) => {
  */
 const path = require( 'path' );
 const jest = require( 'jest' );
-const { sync: spawn } = require( 'cross-spawn' );
 
 /**
  * Internal dependencies
@@ -27,14 +26,6 @@ const {
 	hasArgInCLI,
 	hasProjectFile,
 } = require( '../utils' );
-
-const result = spawn( 'node', [ require.resolve( 'puppeteer-core/install' ) ], {
-	stdio: 'inherit',
-} );
-
-if ( result.status > 0 ) {
-	process.exit( result.status );
-}
 
 // Provides a default config path for Puppeteer when jest-puppeteer.config.js
 // wasn't found at the root of the project or a custom path wasn't defined
