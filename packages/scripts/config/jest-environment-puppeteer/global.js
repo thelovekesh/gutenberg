@@ -23,6 +23,7 @@ const {
 	ERROR_NO_COMMAND,
 } = require( 'jest-dev-server' );
 const chalk = require( 'chalk' );
+const { executablePath } = require( 'puppeteer' );
 
 /**
  * Internal dependencies
@@ -37,9 +38,15 @@ async function setup( jestConfig = {} ) {
 	const config = await readConfig();
 	const puppeteer = getPuppeteer( config );
 	if ( config.connect ) {
-		browser = await puppeteer.connect( config.connect );
+		browser = await puppeteer.connect( {
+			...config.connect,
+			executablePath: executablePath(),
+		} );
 	} else {
-		browser = await puppeteer.launch( config.launch );
+		browser = await puppeteer.launch( {
+			...config.launch,
+			executablePath: executablePath(),
+		} );
 	}
 	process.env.PUPPETEER_WS_ENDPOINT = browser.wsEndpoint();
 
